@@ -21,7 +21,7 @@ public class Home {
     }
 
     public boolean validHome() {
-        return getName() != null && getOccupants() != null;
+        return getName() != null && !getName().isEmpty() && getOccupants() != null && !getOccupants().isEmpty();
     }
 
     public String toString() {
