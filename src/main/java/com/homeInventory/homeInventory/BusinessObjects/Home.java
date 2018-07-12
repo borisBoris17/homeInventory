@@ -1,8 +1,18 @@
 package com.homeInventory.homeInventory.BusinessObjects;
 
+import org.bson.types.ObjectId;
+import org.springframework.data.annotation.Id;
+
 public class Home {
+    @Id
+    private ObjectId _id;
+
     private String name;
     private String occupants;
+
+    // ObjectId needs to be converted to string
+    public String get_id() { return _id.toHexString(); }
+    public void set_id(ObjectId _id) { this._id = _id; }
 
     public String getName() {
         return name;
