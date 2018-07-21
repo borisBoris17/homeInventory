@@ -2,13 +2,25 @@ package com.homeInventory.homeInventory.BusinessObjects;
 
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
+@Document(collection="home")
 public class Home {
     @Id
     private ObjectId _id;
 
     private String name;
     private String occupants;
+
+    public Home() {
+        this.name = "";
+        this.occupants = "";
+    }
+
+    public Home(String name, String occupants) {
+        this.name = name;
+        this.occupants = occupants;
+    }
 
     // ObjectId needs to be converted to string
     public String get_id() { return _id.toHexString(); }
