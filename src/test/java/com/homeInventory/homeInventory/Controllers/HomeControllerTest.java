@@ -100,9 +100,6 @@ public class HomeControllerTest {
 
     @Test
     public void testSearchForHomes_noResultsFound_badRequestStatus() {
-        Home home = new Home();
-        home.setName("name");
-        home.setOccupants("occupants");
         Collection<Home> foundHomes = new ArrayList<>();
 
         new Expectations(){{
@@ -117,9 +114,6 @@ public class HomeControllerTest {
 
     @Test
     public void testSearchForHomes_resultsFound_okRequestStatus() {
-        Home home = new Home();
-        home.setName("name");
-        home.setOccupants("occupants");
         ArrayList<Home> foundHomes = new ArrayList<>();
         foundHomes.add(new Home());
 
@@ -131,5 +125,63 @@ public class HomeControllerTest {
         ResponseEntity<ArrayList> actual = (ResponseEntity<ArrayList>) subject.searchForHomes("name", "occupants");
         assertEquals(HttpStatus.OK, actual.getStatusCode());
         assertEquals(1, actual.getBody().size());
+    }
+
+    @Test
+    public void testSearchForHomesByName_resultsFound_okRequestStatus() {
+        ArrayList<Home> foundHomes = new ArrayList<>();
+        foundHomes.add(new Home());
+
+        new Expectations(){{
+            homeDoa.findAllByName((MongoOperations) any, "name");
+            result = foundHomes;
+        }};
+
+        ResponseEntity<ArrayList> actual = (ResponseEntity<ArrayList>) subject.searchForHomesByName("name");
+        assertEquals(HttpStatus.OK, actual.getStatusCode());
+        assertEquals(1, actual.getBody().size());
+    }
+
+    @Test
+    public void testSearchForHomesByOccupants_resultsFound_okRequestStatus() {
+        ArrayList<Home> foundHomes = new ArrayList<>();
+        foundHomes.add(new Home());
+
+        new Expectations(){{
+            homeDoa.findAllByOccupants((MongoOperations) any, "occupants");
+            result = foundHomes;
+        }};
+
+        ResponseEntity<ArrayList> actual = (ResponseEntity<ArrayList>) subject.searchForHomesByOccupants("occupants");
+        assertEquals(HttpStatus.OK, actual.getStatusCode());
+        assertEquals(1, actual.getBody().size());
+    }
+
+    @Test
+    public void testSearchForHomesByName_noResultsFound_badRequestStatus() {
+        Collection<Home> foundHomes = new ArrayList<>();
+
+        new Expectations(){{
+            homeDoa.findAllByName((MongoOperations) any, "name");
+            result = foundHomes;
+        }};
+
+        ResponseEntity<Collection> actual = (ResponseEntity<Collection>) subject.searchForHomesByName("name");
+        assertEquals(HttpStatus.BAD_REQUEST, actual.getStatusCode());
+        assertEquals(0, actual.getBody().size());
+    }
+
+    @Test
+    public void testSearchForHomesByOccupants_noResultsFound_badRequestStatus() {
+        Collection<Home> foundHomes = new ArrayList<>();
+
+        new Expectations(){{
+            homeDoa.findAllByOccupants((MongoOperations) any, "occupants");
+            result = foundHomes;
+        }};
+
+        ResponseEntity<Collection> actual = (ResponseEntity<Collection>) subject.searchForHomesByOccupants("occupants");
+        assertEquals(HttpStatus.BAD_REQUEST, actual.getStatusCode());
+        assertEquals(0, actual.getBody().size());
     }
 }

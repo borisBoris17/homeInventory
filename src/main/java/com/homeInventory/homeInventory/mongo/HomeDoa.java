@@ -19,4 +19,18 @@ public class HomeDoa {
 
         return mongoOperations.find(query, Home.class);
     }
+
+    public List<Home> findAllByName(MongoOperations mongoOperations, String name) {
+        Query query = new Query();
+        query.addCriteria(Criteria.where("name").is(name));
+
+        return mongoOperations.find(query, Home.class);
+    }
+
+    public List<Home> findAllByOccupants(MongoOperations mongoOperations, String occupants) {
+        Query query = new Query();
+        query.addCriteria(Criteria.where("occupants").is(occupants));
+
+        return mongoOperations.find(query, Home.class);
+    }
 }

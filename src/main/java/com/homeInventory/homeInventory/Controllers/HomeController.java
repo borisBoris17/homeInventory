@@ -35,6 +35,32 @@ public class HomeController {
         return new ResponseEntity<Home>(newHome, status);
     }
 
+    @RequestMapping(value = "/searchByName", method = RequestMethod.GET)
+    public ResponseEntity<?> searchForHomesByName(@RequestParam String name) {
+        HomeDoa homeDoa = new HomeDoa();
+        HttpStatus status = HttpStatus.OK;
+
+        List<Home> foundHomes = homeDoa.findAllByName(mongoOperations, name);
+
+        if (foundHomes.isEmpty()) {
+            status = HttpStatus.BAD_REQUEST;
+        }
+        return new ResponseEntity<List>(foundHomes, status);
+    }
+
+    @RequestMapping(value = "/searchByOccupants", method = RequestMethod.GET)
+    public ResponseEntity<?> searchForHomesByOccupants(@RequestParam String occupants) {
+        HomeDoa homeDoa = new HomeDoa();
+        HttpStatus status = HttpStatus.OK;
+
+        List<Home> foundHomes = homeDoa.findAllByOccupants(mongoOperations, occupants);
+
+        if (foundHomes.isEmpty()) {
+            status = HttpStatus.BAD_REQUEST;
+        }
+        return new ResponseEntity<List>(foundHomes, status);
+    }
+
     @RequestMapping(value = "/search", method = RequestMethod.GET)
     public ResponseEntity<?> searchForHomes(@RequestParam String name, @RequestParam String occupants) {
         HomeDoa homeDoa = new HomeDoa();
