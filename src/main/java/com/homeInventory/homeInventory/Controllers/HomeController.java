@@ -18,6 +18,7 @@ public class HomeController {
     @Autowired
     private MongoOperations mongoOperations;
 
+    @CrossOrigin(origins = "http://localhost:3000")
     @RequestMapping(value = "/create", method = RequestMethod.POST)
     public ResponseEntity<?> createHome(@RequestBody Home home) {
         HomeDoa homeDoa = new HomeDoa();
@@ -35,6 +36,7 @@ public class HomeController {
         return new ResponseEntity<Home>(newHome, status);
     }
 
+    @CrossOrigin(origins = "http://localhost:3000")
     @RequestMapping(value = "/searchByName", method = RequestMethod.GET)
     public ResponseEntity<?> searchForHomesByName(@RequestParam String name) {
         HomeDoa homeDoa = new HomeDoa();
@@ -48,6 +50,7 @@ public class HomeController {
         return new ResponseEntity<List>(foundHomes, status);
     }
 
+    @CrossOrigin(origins = "http://localhost:3000")
     @RequestMapping(value = "/searchByOccupants", method = RequestMethod.GET)
     public ResponseEntity<?> searchForHomesByOccupants(@RequestParam String occupants) {
         HomeDoa homeDoa = new HomeDoa();
@@ -61,6 +64,7 @@ public class HomeController {
         return new ResponseEntity<List>(foundHomes, status);
     }
 
+    @CrossOrigin(origins = "http://localhost:3000")
     @RequestMapping(value = "/search", method = RequestMethod.GET)
     public ResponseEntity<?> searchForHomes(@RequestParam String name, @RequestParam String occupants) {
         HomeDoa homeDoa = new HomeDoa();
