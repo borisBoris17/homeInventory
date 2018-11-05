@@ -7,10 +7,14 @@ import org.springframework.data.mongodb.core.query.Query;
 
 import java.util.List;
 
-public class HomeDoa {
+public class HomeDao {
 
     public void save(MongoOperations mongoOperations, Home home) {
         mongoOperations.save(home);
+    }
+
+    public Home findById(MongoOperations mongoOperations, String id) {
+        return mongoOperations.findById(id, Home.class);
     }
 
     public List<Home> findAll(MongoOperations mongoOperations, String name, String occupants) {

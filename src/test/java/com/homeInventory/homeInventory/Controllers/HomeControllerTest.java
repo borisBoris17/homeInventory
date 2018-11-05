@@ -1,7 +1,7 @@
 package com.homeInventory.homeInventory.Controllers;
 
 import com.homeInventory.homeInventory.BusinessObjects.Home;
-import com.homeInventory.homeInventory.mongo.HomeDoa;
+import com.homeInventory.homeInventory.mongo.HomeDao;
 import mockit.Expectations;
 import mockit.Mocked;
 import org.junit.Before;
@@ -24,7 +24,7 @@ public class HomeControllerTest {
 
     HomeController subject;
     @Mocked
-    HomeDoa homeDoa;
+    HomeDao homeDao;
     @Mocked
     MongoOperations mongoOperations;
 
@@ -34,13 +34,35 @@ public class HomeControllerTest {
     }
 
     @Test
+    public void testFindHomeById_noHomeFound_okStatus() {
+        new Expectations() {{
+            homeDao.findById((MongoOperations) any, "nonExistingId");
+        }};
+
+        ResponseEntity<Home> actual = (ResponseEntity<Home>) subject.findHomeById("nonExistingId");
+        assertEquals(HttpStatus.OK, actual.getStatusCode());
+    }
+
+    @Test
+    public void testFindHomeById_blankId_badRequestStatus() {
+        ResponseEntity<Home> actual = (ResponseEntity<Home>) subject.findHomeById("");
+        assertEquals(HttpStatus.BAD_REQUEST, actual.getStatusCode());
+    }
+
+    @Test
+    public void testFindHomeById_nullId_badRequestStatus() {
+        ResponseEntity<Home> actual = (ResponseEntity<Home>) subject.findHomeById(null);
+        assertEquals(HttpStatus.BAD_REQUEST, actual.getStatusCode());
+    }
+
+    @Test
     public void testCreateHome_nameAndOccupantsSetOnHome_OkStatus() {
         Home home = new Home();
         home.setName("name");
         home.setOccupants("occupants");
 
         new Expectations() {{
-            homeDoa.save((MongoOperations) any, (Home) any);
+            homeDao.save((MongoOperations) any, (Home) any);
             times = 1;
         }};
 
@@ -57,7 +79,7 @@ public class HomeControllerTest {
         home.setOccupants("occupants");
 
         new Expectations() {{
-            homeDoa.save((MongoOperations) any, (Home) any);
+            homeDao.save((MongoOperations) any, (Home) any);
             times = 0;
         }};
 
@@ -73,7 +95,7 @@ public class HomeControllerTest {
         home.setOccupants(null);
 
         new Expectations() {{
-            homeDoa.save((MongoOperations) any, (Home) any);
+            homeDao.save((MongoOperations) any, (Home) any);
             times = 0;
         }};
 
@@ -89,7 +111,7 @@ public class HomeControllerTest {
         home.setOccupants(null);
 
         new Expectations() {{
-            homeDoa.save((MongoOperations) any, (Home) any);
+            homeDao.save((MongoOperations) any, (Home) any);
             times = 0;
         }};
 
@@ -103,7 +125,7 @@ public class HomeControllerTest {
         Collection<Home> foundHomes = new ArrayList<>();
 
         new Expectations(){{
-            homeDoa.findAll((MongoOperations) any, anyString, anyString);
+            homeDao.findAll((MongoOperations) any, anyString, anyString);
             result = foundHomes;
         }};
 
@@ -118,7 +140,7 @@ public class HomeControllerTest {
         foundHomes.add(new Home());
 
         new Expectations(){{
-            homeDoa.findAll((MongoOperations) any, anyString, anyString);
+            homeDao.findAll((MongoOperations) any, anyString, anyString);
             result = foundHomes;
         }};
 
@@ -133,7 +155,7 @@ public class HomeControllerTest {
         foundHomes.add(new Home());
 
         new Expectations(){{
-            homeDoa.findAllByName((MongoOperations) any, "name");
+            homeDao.findAllByName((MongoOperations) any, "name");
             result = foundHomes;
         }};
 
@@ -148,7 +170,7 @@ public class HomeControllerTest {
         foundHomes.add(new Home());
 
         new Expectations(){{
-            homeDoa.findAllByOccupants((MongoOperations) any, "occupants");
+            homeDao.findAllByOccupants((MongoOperations) any, "occupants");
             result = foundHomes;
         }};
 
@@ -162,7 +184,7 @@ public class HomeControllerTest {
         Collection<Home> foundHomes = new ArrayList<>();
 
         new Expectations(){{
-            homeDoa.findAllByName((MongoOperations) any, "name");
+            homeDao.findAllByName((MongoOperations) any, "name");
             result = foundHomes;
         }};
 
@@ -176,7 +198,7 @@ public class HomeControllerTest {
         Collection<Home> foundHomes = new ArrayList<>();
 
         new Expectations(){{
-            homeDoa.findAllByOccupants((MongoOperations) any, "occupants");
+            homeDao.findAllByOccupants((MongoOperations) any, "occupants");
             result = foundHomes;
         }};
 
